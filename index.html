@@ -28,35 +28,40 @@
 
 
     }
+
     var meadow;
     var tomatoes;
     var pears;
+
     var buckets_green;
     var buckets_red;
 
-    function create(){
+    function create() {
         meadow = game.add.sprite(0, 0, 'meadow');
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.physics.arcade.setBoundsToWorld();
 
         pears = game.add.group();
-        tomatoes = game.add.group();
-        console.log(tomatoes);
-        buckets_green = game.add.group();
-        buckets_red = game.add.group();
-
         pears.enableBody = true;
+        createPears();
+
+        tomatoes = game.add.group();
         tomatoes.enableBody = true;
+        createTomatoes();
+
+        buckets_green = game.add.group();
         buckets_green.enableBody = true;
+
+        buckets_red = game.add.group();
         buckets_red.enableBody = true;
-
-
 
         var bucket_green = buckets_green.create(150, 300, 'bucket_green');
 
         var bucket_red = buckets_red.create(400, 300, 'bucket_red');
+    }
 
+    function createPears(){
 
         for (var i = 0; i < 5; i++)
         {
@@ -65,19 +70,20 @@
             pear.input.enableDrag();
 
         }
-        for (var j = 0; j < 3; j++)
-        {
+    }
+    function createTomatoes() {
+        for (var j = 0; j < 3; j++) {
             var tomato = tomatoes.create(j * 70, 100, 'tomato');
             tomato.inputEnabled = true;
             tomato.input.enableDrag();
 
         }
-
     }
+
     function update() {
 
-        game.physics.arcade.collide(tomatoes, buckets_red);
-        game.physics.arcade.collide(pears, buckets_green);
+        //game.physics.arcade.collide(tomato, bucket_red);
+        //game.physics.arcade.collide(pear, bucket_green);
 
         game.physics.arcade.overlap(tomatoes, buckets_red, collisionRed, null, this);
         game.physics.arcade.overlap(pears, buckets_green, collisionGreen, null, this);
@@ -85,9 +91,8 @@
     }
 
     function collisionRed(tomato, bucket){
-        tomato.body = null;
 
-        tomato.destroy();
+        tomato.kill();
 
         if (tomatoes.countLiving() == 0){
             buckets_red.body = null;
@@ -98,9 +103,8 @@
 
     }
     function collisionGreen(pear, bucket){
-        pear.body = null;
 
-        pear.destroy();
+        pear.kill();
 
         if (pears.countLiving() == 0){
             buckets_green.body = null;
